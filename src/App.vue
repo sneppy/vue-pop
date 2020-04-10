@@ -1,27 +1,47 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+	<div class="app">
+		<transition name="fade-up">
+			<pop-view name="notif"/>
+		</transition>
+	</div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'app',
-  components: {
-    HelloWorld
-  }
+	name: 'app',
+
+	created() {
+
+		console.log(this.$pop, this.$notif)
+		this.$notif.done('hello')
+	}
 }
 </script>
 
-<style lang="stylus">
-#app
-  font-family 'Avenir', Helvetica, Arial, sans-serif
-  -webkit-font-smoothing antialiased
-  -moz-osx-font-smoothing grayscale
-  text-align center
-  color #2c3e50
-  margin-top 60px
+<style lang="stylus" scoped>
+@keyframes fade-out
+	0%
+		opacity: 0
+		transform: scale(1.1)
+	100%
+		opacity: 1
+		transform: none
+
+.fade-out-enter-active
+	animation: fade-out .2s
+.fade-out-leave-active
+	animation: fade-out .2s reverse
+
+@keyframes fade-up
+	0%
+		opacity: 0
+		transform: translateY(-8px)
+	100%
+		opacity: 1
+		transform: none
+
+.fade-up-enter-active
+	animation: fade-up .2s
+.fade-up-leave-active
+	animation: fade-up .2s reverse
 </style>

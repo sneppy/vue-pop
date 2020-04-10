@@ -1,0 +1,41 @@
+.pop-wrapper
+	overlay(fixed)
+	
+	display: flex
+	justify-content: center
+	align-items: center
+
+	pointer-events: none
+
+	&:before
+		content: ''
+
+		height: 100%
+
+		display: inline-block
+
+		margin-right: -0.25em
+
+		vertical-align: middle
+
+	.pop-overlay
+		overlay(absolute)
+		z-index: 0
+
+		background-color: rgba(dark, 0.4)
+
+		pointer-events: all
+	
+	.pop-content
+		position: relative
+		z-index: 1
+
+		margin 2em
+		padding: 1em
+		box-sizing: border-box
+
+		background-color: lighter
+
+		vertical-align: middle
+
+		pointer-events: all
