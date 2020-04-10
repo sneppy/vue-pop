@@ -12,7 +12,7 @@ export default {
 
 	created() {
 
-		console.log(this.$pop, this.$notif)
+		console.log(this.$pop)
 		this.$notif.done('hello')
 	}
 }

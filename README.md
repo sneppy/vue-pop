@@ -124,6 +124,14 @@ The top notification can be explicitly closed using `Notif.pop`:
 this.$notif.pop() // Pops current notification, if any
 ```
 
+It is possible to change the position of the notifications from the `pop-view`:
+
+```vue
+<pop-view name="notif" position="top right">
+```
+
+Any combination of `fill|left|center|right` and `top|middle|bottom` is valid (e.g. `fill bottom`, `center middle`, `left top`).
+
 Advanced usage
 --------------
 
@@ -188,5 +196,41 @@ The component you push onto the stack is not wrapped inside any kind of containe
 While it is extremely flexible, it is also tedious, in particular if you need to write many different components. Fortunately the plugin comes with a wrapper that kicks in if the `comp` property is not specified. The wrapper accepts the component as a prop:
 
 ```javascript
-this.$pop.push({props: {comp: () => import('@/components/Window')}})
+this.$pop.push({
+	props: {
+		comp: () => import('@/components/Window'),
+		// Other props ...
+	}
+})
 ```
+
+`Pop.pop` is used to close the current popup:
+
+```javascript
+this.$pop.pop()
+this.$pop.pop('temp')
+this.$pop.pop('notif') // Same as this.$notif.pop()
+```
+
+`Pop.replace` works like `Pop.push` but replaces the current component with the given one.
+
+```javascript
+this.$pop.replace({comp})
+```
+
+It is possible to wrap a `pop-view` inside a `transition` in order to control the pop-animation:
+
+```vue
+<transition name="fade">
+	<pop-view>
+</transition>
+
+<transition name="up">
+	<pop-view name="notif">
+</transition>
+```
+
+Demo
+----
+
+WIP

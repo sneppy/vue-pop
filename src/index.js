@@ -18,7 +18,7 @@ export class Notif
 	constructor(pop)
 	{
 		this.pop = pop
-		pop.initView('notif')
+		this.pop.initView('notif')
 	}
 
 	/**
@@ -105,7 +105,11 @@ export class Pop
 
 		// Create view if it does not exists
 		let view = this.views[name]
-		if (view === undefined) view = this.views[name] = {stack: []}
+		if (view === undefined)
+		{
+			Vue.set(this.views, name, {stack: []})
+			view = this.views[name]
+		}
 
 		return view
 	}
@@ -167,12 +171,9 @@ export class Pop
 	 */
 	initView(name)
 	{
-		// Check if view already exists
-		let view = this.views[name]
-		if (view !== undefined) return view
-
-		// Create view
-		Vue.set(this.views, name, {stack: []})
+		// In the end this is just like
+		// asking for the view
+		this._getView(name)
 	}
 
 	/**
