@@ -107,7 +107,6 @@ export class Pop
 		let view = this.views[name]
 		if (view === undefined)
 		{
-			debugger
 			Vue.set(this.views, name, {stack: []})
 			view = this.views[name]
 		}
