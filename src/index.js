@@ -38,6 +38,14 @@ export class Notif
 	}
 	
 	/**
+	 * Pop top notification
+	 */
+	pop()
+	{
+		this.pop.pop('notif')
+	}
+	
+	/**
 	 * Push error notification
 	 */
 	error(message, timeout = 2000)

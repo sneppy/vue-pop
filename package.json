@@ -1,7 +1,16 @@
 {
-  "name": "vue-pop",
+  "name": "@sneppy/vue-pop",
   "version": "0.1.1",
-  "private": true,
+  "private": false,
+  "description": "A Vue plugin to easily manage pop-up windows and notifications",
+  "keywords": ["vue", "pop", "up", "popup", "notification", "notif"],
+  "homepage": "https://github.com/sneppy/vue-pop#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sneppy/vue-pop.git"
+  },
+  "main": "./dist/vue-pop.umd.js",
+  "module": "./dist/vue-pop.common.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -18,5 +27,17 @@
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
     "vue-template-compiler": "^2.6.10"
-  }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "bugs": {
+    "url": "https://github.com/Sneppy/snue/issues"
+  },
+  "files": [
+    "dist/*",
+    "src/*"
+  ]
 }
