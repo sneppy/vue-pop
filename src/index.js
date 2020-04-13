@@ -241,7 +241,7 @@ export class Pop
 			this._maybeClearTimer(top)
 
 			// Replace head
-			view.stack[len - 1] = popup
+			Vue.set(view.stack, len - 1, popup)
 		}
 		// Push onto stack
 		else view.stack.push(popup)
