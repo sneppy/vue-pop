@@ -33,17 +33,20 @@ export default defineComponent({
 			// Get top
 			const top = pop.top(props.name || 'default')
 			if (!top) return null
-			console.log(top)
 
 			// Merge props
 			data = Object.assign(data, props, top.props)
 
 			if ('comp' in top)
+			{
 				// Draw provided component
 				return h(top.comp, data)
+			}
 			else
+			{
 				// Draw wrapper
 				return h(Wrapper, data)
+			}
 		}
 	}
 })
