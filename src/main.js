@@ -1,8 +1,12 @@
-import Vue from 'vue'
+import {createApp} from 'vue';
+import Pop, {Notif} from './'
 import App from './App.vue'
+import './style/vars.css'
+import './style/index.less'
 
-Vue.config.productionTip = false
+export let pop = new Pop
+export let notif = new Notif(pop)
 
-new Vue({
-  render: h => h(App),
-}).$mount('#app')
+createApp(App)
+	.use(pop)
+	.mount('#app')

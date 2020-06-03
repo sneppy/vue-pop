@@ -1,20 +1,45 @@
 {
-  "name": "vue-pop-next",
-  "version": "0.1.0",
-  "private": true,
+  "name": "@sneppy/vue-pop",
+  "version": "3.0.0-beta.1",
+  "private": false,
+  "description": "A Vue 3 plugin to easily manage pop-up windows and notifications",
+  "keywords": ["vue", "pop", "up", "popup", "notification", "notif"],
+  "homepage": "https://github.com/sneppy/vue-pop#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sneppy/vue-pop.git"
+  },
+  "main": "./dist/vue-pop.umd-js",
+  "module": "./dist/vue-pop.common.js",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+	"build": "vue-cli-service build",
+	"bundle": "vue-cli-service build --target lib --name vue-pop ./src/index.js",
+	"prepublishOnly": "vue-cli-service build --target lib --name vue-pop ./src/index.js"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.13.0",
     "core-js": "^3.6.5",
-    "vue": "^2.6.11"
+    "vue": "^3.0.0-beta.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",
     "@vue/cli-service": "~4.4.0",
-    "stylus": "^0.54.7",
-    "stylus-loader": "^3.0.2",
-    "vue-template-compiler": "^2.6.11"
-  }
+    "@vue/compiler-sfc": "^3.0.0-beta.1",
+    "less": "^3.11.2",
+    "less-loader": "^6.1.0",
+    "vue-cli-plugin-vue-next": "~0.1.3"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "bugs": {
+    "url": "https://github.com/sneppy/vue-pop/issues"
+  },
+  "files": [
+    "dist/*",
+    "src/*"
+  ]
 }

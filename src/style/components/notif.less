@@ -1,0 +1,98 @@
+/* Fontawesome setup */
+@import '~@fortawesome/fontawesome-free/css/solid.css';
+
+.pop-notif {
+	width: 100%;
+	height: 100%;
+
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 10001;
+
+	pointer-events: none;
+
+	.message {
+		display: flex;
+		align-items: center;
+
+		padding: 1em;
+
+		background-color: transparent;
+
+		pointer-events: auto;
+
+		&:before {
+			display: inline-block;
+
+			margin-right: 0.5em;
+
+			font-family: 'Font Awesome 5 Free';
+			font-weight: 900;
+		}
+
+		/** Notification position */;
+		&:not(.pos-fill) {
+			position: absolute;
+			z-index: 1;
+
+			margin: 1em;
+
+			&.pos-left { left: 0; }
+			&.pos-center {
+				left: 50%;
+
+				transform: translateX(-50%);
+			}
+			&.pos-right { right: 0; }
+		}
+		&.pos-fill {
+			width: 100%;
+			position: absolute;
+		}
+		&.pos-top { top: 0; }
+		&.pos-middle {
+			top: 50%;
+
+			transform: translateY(-50%);
+		}
+		&.pos-bottom { bottom: 0; }
+
+		/** Notification type */
+		
+		&.type-log,
+		&.type-info {
+			background-color: #vue-pop.rgb[log];
+			color: #vue-pop.rgb[log-text];
+
+			&:before { content: '\f05a'; }
+		}
+
+		&.type-error {
+			background-color: #vue-pop.rgb[error];
+			color: #vue-pop.rgb[error-text];
+
+			&:before { content: '\f06a'; }
+		}
+		&.type-warn,
+		&.type-warning {
+			background-color: #vue-pop.rgb[warn];
+			color: #vue-pop.rgb[warn-text];
+
+			&:before { content: '\f071'; }
+		}
+		&.type-done,
+		&.type-success {
+			background-color: #vue-pop.rgb[done];
+			color: #vue-pop.rgb[done-text];
+
+			&:before { content: '\f00c'; }
+		}
+		&.type-doneall {
+			background-color: #vue-pop.rgb[done];
+			color: #vue-pop.rgb[done-text];
+
+			&:before { content: '\f560'; }
+		}
+	}
+}

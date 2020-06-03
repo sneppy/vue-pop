@@ -1,0 +1,11 @@
+/* CSS variables */
+.vue-pop {
+	--color-log: 112, 128, 144;
+	--color-log-text: 248, 248, 255;
+	--color-error: 220, 20, 60;
+	--color-error-text: 248, 248, 255;
+	--color-warn: 224, 194, 41;
+	--color-warn-text: 16, 32, 48;
+	--color-done: 100, 149, 237;
+	--color-done-text: 248, 248, 255;
+}
