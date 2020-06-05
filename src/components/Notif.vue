@@ -1,5 +1,5 @@
 <template>
-	<div class="vue-pop pop-notif">
+	<div class="pop-notif">
 		<div class="message"
 			:class="[type, position].join(' ')">{{ message }}</div>
 	</div>
@@ -33,7 +33,10 @@ export default {
 
 	setup(props) {
 		
+		// Notification type
 		let type = computed(() => 'type-' + props.type)
+
+		// Notification position
 		let position = computed(() => props.position.split(' ').map((pos) => 'pos-' + pos).join(' '))
 
 		return {type, position}

@@ -148,6 +148,21 @@ class Pop
 	/**
 	 * 
 	 */
+	_markRaw(popup)
+	{
+		if ('comp' in popup)
+		{
+			popup.comp = markRaw(popup.comp)
+		}
+		else if (popup.props && 'comp' in popup.props)
+		{
+			popup.props.comp = markRaw(popup.props.comp)
+		}
+	}
+
+	/**
+	 * 
+	 */
 	constructor()
 	{
 		// Init default view
@@ -172,9 +187,8 @@ class Pop
 		let view = this._getView(name)
 		let size = view.length
 
-		// If has top level component
-		// make it raw
-		if ('comp' in popup) popup.comp = markRaw(popup.comp)
+		// Mark raw component
+		this._markRaw(popup)
 
 		if (size !== 0)
 		{

@@ -1,10 +1,5 @@
-import {
-	h,
-	inject,
-	reactive,
-	defineComponent
-} from 'vue'
-import {popKey} from '../'
+import { h, inject, reactive, defineComponent } from 'vue'
+import { popKey } from '../'
 import Wrapper from './wrapper'
 
 export default defineComponent({
@@ -19,7 +14,7 @@ export default defineComponent({
 		}
 	},
 
-	setup(props, {attrs}) {
+	setup(props, { attrs }) {
 
 		// Get pop instance
 		const pop = inject(popKey)
@@ -35,7 +30,10 @@ export default defineComponent({
 			if (!top) return null
 
 			// Merge props
-			data = Object.assign(data, props, top.props)
+			data = Object.assign(data, attrs, top.props)
+
+			// Register close event with default behaviour
+			if (!('onClose' in data)) data.onClose = () => pop.pop(props.name)
 
 			if ('comp' in top)
 			{

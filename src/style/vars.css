@@ -1,5 +1,7 @@
 /* CSS variables */
-.vue-pop {
+.pop-notif,
+.pop-wrapper {
+	/* Colors */
 	--color-log: 112, 128, 144;
 	--color-log-text: 248, 248, 255;
 	--color-error: 220, 20, 60;
@@ -8,4 +10,7 @@
 	--color-warn-text: 16, 32, 48;
 	--color-done: 100, 149, 237;
 	--color-done-text: 248, 248, 255;
+
+	/* Wrapper overlay */
+	--wrapper-depth: 10001;
 }
