@@ -216,8 +216,11 @@ class Pop
 		this._maybeClearTimer(top)
 
 		// Reset timeout for next popup
-		let next = view[view.length - 1]
-		this._maybeSetupTimer(next, name)
+		if (view.length)
+		{
+			let next = view[view.length - 1]
+			this._maybeSetupTimer(next, name)
+		}
 	}
 
 	/**

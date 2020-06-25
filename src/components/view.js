@@ -31,6 +31,13 @@ export default defineComponent({
 
 			// Merge props
 			data = Object.assign(data, attrs, top.props)
+			
+			// Attach events
+			for (let key in (top.on || {}))
+			{
+				let name = 'on' + key[0].toUpperCase() + key.slice(1)
+				data[name] = top.on[key]
+			}
 
 			// Register close event with default behaviour
 			if (!('onClose' in data)) data.onClose = () => pop.pop(props.name)
