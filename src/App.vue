@@ -25,18 +25,28 @@ export default {
 				}
 			},
 
-			setup(props) {
+			setup(props, { emit }) {
+
+				let onClick = () => emit('event-two')
 				
 				return () => {
 
-					return h('div', { class: 'popup-window' }, [
+					return h('div', { class: 'popup-window', onClick }, [
 						h('div', { class: 'message' }, props.message)
 					])
 				}
 			}
 		})
 
-		const onClick = () => pop.push({ props: { comp: popupWindow, message: 'Hello, world!' } })
+		const onClick = () => pop.push({
+			props: {
+				comp: popupWindow,
+				message: 'Hello, world!'
+			},
+			on: {
+				'event-two': () => console.log('clicked')
+			}
+		})
 		return { onClick }
 	}
 }
