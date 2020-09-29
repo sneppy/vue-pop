@@ -1,6 +1,6 @@
 {
   "name": "@sneppy/vue-pop",
-  "version": "3.0.0-beta.3",
+  "version": "3.0.0-beta.4",
   "private": false,
   "description": "A Vue 3 plugin to easily manage pop-up windows and notifications",
   "keywords": ["vue", "pop", "up", "popup", "notification", "notif"],

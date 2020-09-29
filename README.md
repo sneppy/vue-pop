@@ -1,6 +1,10 @@
-# Pop
+# vue-pop
 
-> A Vue plugin that makes managing pop-ups and notifications a breeze
+**vue-pop** is a Vue plugin that makes managing pop-ups and notifications a breeze.
+
+> This branch hosts a version of vue-pop compatible with [Vue 3](https://github.com/vue/vue-next)
+> 
+> If you are using Vue 2 you should install the older release, `@sneppy/vue-pop@0.1.5`
 
 Contributors
 ------------
@@ -9,189 +13,194 @@ Contributors
 - Me @ [sneppy](https://github.com/sneppy)
 - Myself @ [sneppy](https://github.com/sneppy)
 
+Installation
+------------
+
+_vue-pop_ can be installed via npm:
+
+```console
+$ npm i -S @sneppy/vue-pop
+```
+
 Basic usage
 -----------
 
-Install the plugin:
-
-```console
-pop@vue:~$ npm i @sneppy/vue-pop
-```
-
-In your entry point file, import the plugin and tell Vue to setup it up:
+Create a new instance of `Pop` and tell Vue to use it:
 
 ```javascript
-import { createApp } from 'vue'
-import App from './App'
-import Pop from '@sneppy/pop'
+import { createApp } from 'vue';
+import Pop from './'
+import App from './App.vue'
 
-export const pop = new Pop
+export let pop = new Pop
 
-createApp(App).use(pop).mount('#app')
+createApp(App)
+	.use(pop)
+	.mount('#app')
+
 ```
 
-Place a `pop-view` in any top-level component, e.g. `App.vue`:
+Place a `<pop-view/>` somewhere:
 
-```vue
+```html
 <template>
-	<div class="app">
-		<!-- ... -->
-		<transition name="fade-up">
-			<pop-view/>
-		</transition>
+	<div id="App">
+		<router-view/>
+		<pop-view/>
 	</div>
 </template>
 ```
 
-Now you can import it and use `pop.push` inside any component to push a new component on the stack:
+Next, import the `Pop` instance in some component, and use `Pop.push()` to push a popup window on the stack:
 
-```vue
-<script>
-import { onMounted } from 'vue'
+```javascript
 import { pop } from '@/main'
 
 export default {
-	name: 'app',
+	name: 'SomeComp',
 
 	setup() {
-		
-		onMounted(() => pop.push({ comp: () => import('@/components/PopUpWindow) }))
+
+		const onClick = () => pop.push({
+			comp: /* Component or async component */
+		})
 	}
 }
-</script>
 ```
 
-Notif
------
+You can pop the topmost popup anytime using `Pop.pop()`.
 
-To get an immediate feeling of the plugin, it may be easier to use the `Notif` utility, a simple wrapper around `vue-pop` that allows you to show simple text notifications.
-
-First of all, create a new instance of notif:
-
-```javascript
-import Vue from 'vue'
-import Pop from '@sneppy/pop'
-
-export const pop = new Pop
-export const nofif = new Notif(Pop)
-```
-
-Notif also needs its very own `pop-view`:
-
-```vue
-<template>
-	<div class="app">
-		<!-- ... -->
-		<transition name="fade-up">
-			<pop-view name="notif">
-		</transition>
-	</div>
-</template>
-```
-
-Then inside any component:
-
-```javascript
-notif.push('Hello world!')
-```
-
-It is possible to specify the type of the notification and a duration time (default to 2 seconds):
-
-```javascript
-notif.push('Failure!', 'error', 5000) // in milliseconds
-```
-
-The duration can be a falsy value (e.g. `null`, `false`, `undefined`) in which case the notification is shown until the an explicit call to `Notif.pop` is made.
-
-Notif has a few built-in notification types:
-
-- `'done'`;
-- `'error`';
-- `'warn'`;
-- `'log'`;
-
-in which case you can use the omonymous methods, `Notif.done`, `Notif.error`, `Notif.warn` and `Notif.log` respectively.
-
-The top notification can be explicitly closed using `Notif.pop`:
-
-```javascript
-notif.pop() // Pops current notification, if any
-```
-
-It is possible to change the position of the notifications from the `pop-view`:
-
-```vue
-<pop-view name="notif" position="top right">
-```
-
-Any combination of `fill|left|center|right` and `top|middle|bottom` is valid (e.g. `fill bottom`, `center middle`, `left top`).
-
-Advanced usage
---------------
-
-`Pop.push` is used to push a new component onto the stack. The first argument is an object with the following properties:
-
-| prop | description | example |
-| - | - | - |
-| `comp` | A Vue component, may be async. | `comp: () => import('@/components/Notification')` |
-| `props` | Props data passed to the component | `props: {title: 'Notif', text: 'This is a notification'}` |
-| `on` | Vue event listeners | `on: {'click': () => console.log('clicked')}` |
-| `timeout` | A duration (in ms) after which the component is popped | `timeout: 3000` |
-
-The second argument is the name of the view, which defaults to `'default'`. The plugin supports multiple named views, making it possible to display multiple components simultaneously. Each view needs a corresponding `pop-view`:
-
-```vue
-<template>
-	<div class="app">
-		<!-- ... -->
-		<pop-view/> <!-- name="default" -->
-		<pop-view name="foo">
-		<pop-view name="bar">
-		<pop-view name="notif">
-	</div>
-</template>
-```
-
-The component you push onto the stack is not wrapped inside any kind of container, so you need to write a lot of style to make it look like an actual popup (e.g. fill screen, blur background, center in screen).
-
-While it is extremely flexible, it is also tedious, in particular if you need to write many different components. Fortunately the plugin comes with a wrapper that kicks in if the `comp` property is not specified. The wrapper accepts the component as a prop:
+Props can be passed down to the popup component like this:
 
 ```javascript
 pop.push({
+	comp: Message,
 	props: {
-		comp: () => import('@/components/Window'),
-		// Other props ...
+		title: 'Message title',
+		text: 'Message text'
 	}
 })
 ```
 
-`Pop.pop` is used to close the current popup:
+You may also listen for events emitted by the component:
 
 ```javascript
-pop.pop()
-pop.pop('temp')
-pop.pop('notif') // Same as notif.pop()
+pop.push({
+	comp: ConfirmDialog,
+	props: {
+		message: 'Are you sure you want to exit'
+	},
+	on: {
+		'confirm': () => doStuff(),
+		'cancel': () => pop.pop() // Close popup
+	}
+})
 ```
 
-`Pop.replace` works like `Pop.push` but replaces the current component with the given one.
+Note that the popup component is rendered as-is, which means that usually you will have to write some more HTML and CSS to make it look like an actual component.
+
+_vue-pop_ comes with a predefined wrapper, which you can enable by passing the component as a prop:
 
 ```javascript
-pop.replace({comp})
+pop.push({
+	props: {
+		comp: ConfirmDialog,
+		message: 'Are you sure you want to exit'
+	},
+	on: {
+		'confirm': () => doStuff(),
+		'cancel': () => pop.pop() // Close popup
+	}
+})
 ```
 
-It is possible to wrap a `pop-view` inside a `transition` in order to control the pop-animation:
+The wrapper component generates the following HTML:
 
 ```html
-<transition name="fade">
-	<pop-view>
-</transition>
-
-<transition name="up">
-	<pop-view name="notif">
-</transition>
+<div class="pop-wrapper">
+	<div class="pop-overlay"></div>
+	<div class="pop-content">
+		<Component/>
+	</div>
+</div>
 ```
 
-Demo
-----
+You can style the wrapper using these classes.
 
-WIP
+Notifications
+-------------
+
+_vue-pop_ also has an easy way to handle simple notifications. To enable notifications, create a new `Notif` instance right after creating the `Pop` instance:
+
+```javascript
+let pop = new Pop
+let notif = new Notif(pop)
+```
+
+You will also need to create a dedicated view somewhere:
+
+```html
+
+<template>
+	<div id="App">
+		<router-view/>
+		<pop-view/>
+		<pop-view name="notif"/>
+	</div>
+</template>
+```
+
+The `name` attribute designate that view as the notification view.
+
+The notif object has various methods that determine the type of notification:
+
+| method | type |
+| ------ | ---- |
+| `log` or `info` | log message |
+| `done` or `doneall` | success message |
+| `warn` | warning message |
+| `error` | error message |
+
+All methods are invoked with a plain string message as first parameter and a time duration (ms) as second parameter:
+
+```javascript
+notif.done('Personal data updated', 3000)
+```
+
+The time duration may be `undefined`, in which case you will need to manually pop the notification with `Notif.pop()`.
+
+By default, notifications are displayed in a bar that fills the top of the screen. You can change the position of notifications with the attribute `position` on the notif `<pop-view/>`:
+
+```html
+<pop-view name="notif" position="right bottom"/>
+```
+
+Any combination of the following keywords is accepted: `left`, `center`, `right`, `fill` and `top`, `middle`, `bottom`.
+
+> Note that you will also need to import the styles in `src/style`.
+
+Multiple views
+--------------
+
+You can define multiple views, usually with different names. In order to address a certain view, you must provide its name in `Pop.push()` and `Pop.pop()`:
+
+```html
+<pop-view name="messages"/>
+<pop-view name="other"/>
+```
+
+```javascript
+pop.push({
+	comp: SomeComp
+}, 'messages')
+
+pop.pop('other')
+```
+
+The name is also passed as an attribute `view-name` and can be use to style the wrapper component of that view:
+
+```css
+.pop-wrapper[view-name=messages] {
+	...
+}
+```

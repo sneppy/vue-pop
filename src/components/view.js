@@ -30,7 +30,9 @@ export default defineComponent({
 			if (!top) return null
 
 			// Merge props
-			data = Object.assign(data, attrs, top.props)
+			data = Object.assign(data, attrs, top.props, {
+				'view-name': props.name
+			})
 			
 			// Attach events
 			for (let key in (top.on || {}))

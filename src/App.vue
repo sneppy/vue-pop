@@ -1,8 +1,9 @@
 <template>
 	<div id="App">
 		<button @click="onClick">Show</button>
-		<pop-view></pop-view>
-		<pop-view name="notif" position="fill bottom"></pop-view>
+		<button @click="onNotif">Notif</button>
+		<pop-view name="adventure"></pop-view>
+		<pop-view name="notif" position="left bottom"></pop-view>
 	</div>
 </template>
 
@@ -46,8 +47,11 @@ export default {
 			on: {
 				'event-two': () => console.log('clicked')
 			}
-		})
-		return { onClick }
+		}, 'adventure')
+
+		const onNotif = () => notif.done('All done here')
+
+		return { onClick, onNotif }
 	}
 }
 </script>
