@@ -45,7 +45,7 @@ export default {
 				message: 'Hello, world!'
 			},
 			on: {
-				'event-two': () => console.log('clicked')
+				'event-two': () => (console.log('clicked'), true)
 			}
 		}, 'adventure')
 

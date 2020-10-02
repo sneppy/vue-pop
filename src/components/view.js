@@ -38,7 +38,15 @@ export default defineComponent({
 			for (let key in (top.on || {}))
 			{
 				let name = 'on' + key[0].toUpperCase() + key.slice(1)
-				data[name] = top.on[key]
+				data[name] = (...args) => {
+					
+					// Apply method
+					if (top.on[key](...args) === true)
+					{
+						// Close if handler returns true
+						pop.pop(props.name || 'default')
+					}
+				}
 			}
 
 			// Register close event with default behaviour
