@@ -1,22 +1,22 @@
-import { defineComponent, h, reactive, computed } from 'vue'
+import { computed, defineComponent, h, reactive } from 'vue'
 
 // TODO
-export default defineComponent({
-	name: 'PopWrapper',
-
+export default {
 	props: {
+		/** The wrapped component */
 		comp: {
 			type: Object,
 			required: true
 		},
 
-		/// View name
+		/** The name of the view */
 		'viewName': {
 			type: String,
 			default: 'default'
 		}
 	},
 
+	/** Called before component is mounted */
 	setup(props, { attrs, emit }) {
 
 		// Get component
@@ -25,6 +25,7 @@ export default defineComponent({
 		// Get view name
 		let name = computed(() => props.viewName)
 		
+		// Return the render function
 		return () => {
 			
 			// Dont' draw if component is null
@@ -48,4 +49,4 @@ export default defineComponent({
 			])
 		}
 	}
-})
+}

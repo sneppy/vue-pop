@@ -1,12 +1,10 @@
-import { h, inject, reactive, defineComponent } from 'vue'
+import { h, inject, reactive } from 'vue'
 import { popKey } from '../'
 import Wrapper from './wrapper'
 
-export default defineComponent({
-	name: 'PopView',
+export default {
 
 	functional: true,
-	
 	props: {
 		name: {
 			type: String,
@@ -14,6 +12,7 @@ export default defineComponent({
 		}
 	},
 
+	/** Called before component is mounted */
 	setup(props, { attrs }) {
 
 		// Get pop instance
@@ -22,7 +21,7 @@ export default defineComponent({
 		// Reactive data
 		let data = reactive({})
 
-		// New render function
+		// Render function
 		return () => {
 
 			// Get top
@@ -64,4 +63,4 @@ export default defineComponent({
 			}
 		}
 	}
-})
+}
