@@ -3,7 +3,7 @@
 		<button @click="onClick">Show</button>
 		<button @click="onNotif">Notif</button>
 		<pop-view name="adventure"></pop-view>
-		<pop-view name="notif" position="left bottom"></pop-view>
+		<pop-view name="notif" position="right bottom"></pop-view>
 	</div>
 </template>
 
@@ -49,7 +49,7 @@ export default {
 			}
 		}, 'adventure')
 
-		const onNotif = () => notif.done('All done here')
+		const onNotif = () => notif.log('All done here')
 
 		return { onClick, onNotif }
 	}

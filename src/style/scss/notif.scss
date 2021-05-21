@@ -1,0 +1,79 @@
+.pop-notif {
+	width: 100%;
+	height: 100%;
+
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 99999;
+
+	pointer-events: none;
+
+	.message {
+		display: flex;
+		align-items: center;
+
+		padding: 1em;
+
+		background-color: transparent;
+
+		pointer-events: auto;
+
+		/* Notification position */
+		&:not(.pos-fill) {
+			position: absolute;
+			z-index: 1;
+
+			margin: 1em;
+
+			&.pos-left {
+				left: 0;
+			}
+			&.pos-center {
+				left: 50%;
+
+				transform: translateX(-50%);
+			}
+			&.pos-right {
+				right: 0;
+			}
+		}
+		&.pos-fill {
+			width: 100%;
+			position: absolute;
+		}
+		&.pos-top {
+			top: 0;
+		}
+		&.pos-middle {
+			top: 50%;
+
+			transform: translateY(-50%);
+		}
+		&.pos-bottom {
+			bottom: 0;
+		}
+
+		/* Notification type */
+		&.type-log,
+		&.type-info {
+			background-color: var(--notif-color-info-background, slategray);
+			color: var(--notif-color-info-text, #f8fcff);
+		}
+		&.type-error {
+			background-color: var(--notif-color-error-background, crimson);
+			color: var(--notif-color-error-text, #f8fcff);
+		}
+		&.type-warn,
+		&.type-warning {
+			background-color: var(--notif-color-error-background, coral);
+			color: var(--notif-color-error-text, #102030);
+		}
+		&.type-done,
+		&.type-doneall,
+		&.type-success {
+			background-color: var(--notif-color-done-background, cornflowerblue);
+			color: var(--notif-color-done-text, #f8fcff);
+		}
+	}
+}
