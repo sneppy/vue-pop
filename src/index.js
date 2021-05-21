@@ -1,50 +1,62 @@
-import {reactive, markRaw} from 'vue'
+import { reactive, markRaw } from 'vue'
 import PopView from './components/view'
-import PopNotif from './components/Notif'
+import PopNotif from './components/Notif.vue'
 
-/// Pop key
+
+/** Symbol used to inject the pop instance */
 export const popKey = Symbol('pop')
 
 /**
- *
+ * An helper class to handle simple
+ * notifications, based on Pop
  */
-class Notif
+export class Notif
 {
-	/// Pop instance
+	/** Pop instance used by this Notif instance */
 	pop = null
 
 	/**
-	 * Default constructor
+	 * Construct a new Notif object
+	 * 
+	 * @param {Pop} pop the Pop instance used
 	 */
 	constructor(pop)
 	{
-		// Init notif view
-		this.pop = pop
-		this.pop._getView('notif')
+		/** The Pop instance bound to this Notif */
+		this._pop = pop
+
+		// Init Notif view
+		this._pop._getView('notif')
 	}
 
 	/**
-	 * Push notification
+	 * Push a new notification
+	 * 
+	 * @param {string|Error} message a string or Error to display
+	 * @param {string} type the type of message to display
+	 * @param {number|null} timeout the duration of the message (in milliseconds) or null
 	 */
 	push(message, type, timeout = 2000)
 	{
-		this.pop && this.pop.push({
+		this._pop && this._pop.push({
 			comp: PopNotif,
-			props: {message, type},
+			props: { message, type },
 			timeout
 		}, 'notif')
 	}
 	
 	/**
-	 * Pop top notification
+	 * Remove the last pushed notification
 	 */
 	pop()
 	{
-		this.pop.pop('notif')
+		this._pop.pop('notif')
 	}
 	
 	/**
-	 * Push error notification
+	 * Push an error notification
+	 * 
+	 * @see push
 	 */
 	error(message, timeout = 2000)
 	{
@@ -52,7 +64,9 @@ class Notif
 	}
 
 	/**
-	 * Push done notification
+	 * Push a done notification
+	 * 
+	 * @see push
 	 */
 	done(message, timeout = 2000)
 	{
@@ -60,7 +74,9 @@ class Notif
 	}
 
 	/**
-	 * Push warning notification
+	 * Push a warning notification
+	 * 
+	 * @see push
 	 */
 	warn(message, timeout = 2000)
 	{
@@ -68,7 +84,9 @@ class Notif
 	}
 
 	/**
-	 * Push log notification
+	 * Push a log notification
+	 * 
+	 * @see push
 	 */
 	log(message, timeout = 2000)
 	{
@@ -77,15 +95,18 @@ class Notif
 }
 
 /**
- *
+ * A class to handle notifications, pop-ups
+ * and more in Vue 3
  */
-class Pop
+export class Pop
 {
 	/// Views
 	views = {}
 
 	/**
 	 * Returns existing view or creates a new one
+	 * 
+	 * @param {string} name the name of the view
 	 */
 	_getView(name = 'default')
 	{
@@ -94,7 +115,13 @@ class Pop
 	}
 
 	/**
-	 *
+	 * If a timeout is specified, setup a
+	 * timer at the end of which we close
+	 * the popup.
+	 * 
+	 * @param {Object} popup the popup spec object
+	 * @param {string} name the name of the view
+	 * @return {boolean} true if a timer was setup
 	 */
 	_maybeSetupTimer(popup, name = 'default')
 	{
@@ -111,7 +138,10 @@ class Pop
 	}
 
 	/**
-	 *
+	 * Attempt to pause a popup timeout
+	 * 
+	 * @param {Object} popup the popup spec object
+	 * @return {boolean} true if a timer was paused
 	 */
 	_maybePauseTimer(popup)
 	{
@@ -128,7 +158,9 @@ class Pop
 	}
 
 	/**
-	 *
+	 * Attempt to clear a popup timeout
+	 * 
+	 * @see _maybeSetupTimer
 	 */
 	_maybeClearTimer(popup)
 	{
@@ -146,7 +178,10 @@ class Pop
 	}
 
 	/**
+	 * Tell vue to skip the popup component
+	 * when reacting to changes
 	 * 
+	 * @param {Object} popup the popup spec object
 	 */
 	_markRaw(popup)
 	{
@@ -161,7 +196,8 @@ class Pop
 	}
 
 	/**
-	 * 
+	 * Construct a new Pop instance with the
+	 * default view
 	 */
 	constructor()
 	{
@@ -170,7 +206,10 @@ class Pop
 	}
 
 	/**
-	 * Returns top element of the stack
+	 * Returns the top popup of the stack
+	 * 
+	 * @param {string} name the name of the view
+	 * @return {Object}
 	 */
 	top(name = 'default')
 	{
@@ -180,7 +219,10 @@ class Pop
 	}
 
 	/**
+	 * Push a new popup onto the stack
 	 * 
+	 * @param {Object} popup the popup spec object
+	 * @param {string} name the name of the view to use
 	 */
 	push(popup, name = 'default')
 	{
@@ -234,6 +276,3 @@ class Pop
 		app.provide(popKey, this)
 	}
 }
-
-export default Pop
-export {Pop, Notif}

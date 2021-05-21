@@ -1,6 +1,6 @@
 {
   "name": "@sneppy/vue-pop",
-  "version": "3.0.0-beta.6",
+  "version": "3.0.0-beta.7",
   "private": false,
   "description": "A Vue 3 plugin to easily manage pop-up windows and notifications",
   "keywords": [
@@ -17,21 +17,20 @@
     "type": "git",
     "url": "git+https://github.com/sneppy/vue-pop.git"
   },
-  "main": "./dist/vue-pop.umd-js",
-  "module": "./dist/vue-pop.common.js",
+  "main": "./dist/vue-pop.umd.js",
+  "module": "./dist/vue-pop.es.js",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "bundle": "vue-cli-service build --target lib --name vue-pop ./src/index.js",
-    "prepublishOnly": "vue-cli-service build --target lib --name vue-pop ./src/index.js"
+    "dev": "vite",
+    "build": "vite build",
+    "prepublishOnly": "vite build"
   },
   "dependencies": {
     "vue": "^3.0.11"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.5.13",
-    "@vue/cli-service": "^4.5.13",
-    "@vue/compiler-sfc": "^3.0.11"
+    "@vitejs/plugin-vue": "^1.2.2",
+    "@vue/compiler-sfc": "^3.0.11",
+    "vite": "^2.3.3"
   },
   "bugs": {
     "url": "https://github.com/sneppy/vue-pop/issues"

@@ -1,5 +1,5 @@
-import {createApp} from 'vue';
-import Pop, {Notif} from './'
+import { createApp } from 'vue';
+import { Pop, Notif } from './'
 import App from './App.vue'
 
 export let pop = new Pop
