@@ -1,22 +1,18 @@
 # vue-pop
 
-**vue-pop** is a Vue plugin that makes managing pop-ups and notifications a breeze.
+[![npm version](https://badge.fury.io/js/@sneppy%2Fvue-pop.svg)](https://www.npmjs.com/package/@sneppy/vue-pop)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build](https://github.com/sneppy/vue-pop/actions/workflows/build.yml/badge.svg)](https://github.com/sneppy/vue-pop/actions/workflows/build.yml)
 
-> This branch hosts a version of vue-pop compatible with [Vue 3](https://github.com/vue/vue-next)
-> 
-> If you are using Vue 2 you should install the older release, `@sneppy/vue-pop@0.1.5`
 
-Contributors
-------------
+**vue-pop** is a plugin for Vue 3 to manage pop-ups and notifications.
 
-- Sneppy @ [sneppy](https://github.com/sneppy)
-- Me @ [sneppy](https://github.com/sneppy)
-- Myself @ [sneppy](https://github.com/sneppy)
+![demo](https://i.imgur.com/gRfHqVJ.gif)
 
 Installation
 ------------
 
-_vue-pop_ can be installed via npm:
+You can install _vue-pop_ with npm:
 
 ```console
 $ npm i -S @sneppy/vue-pop
@@ -25,14 +21,15 @@ $ npm i -S @sneppy/vue-pop
 Basic usage
 -----------
 
-Create a new instance of `Pop` and tell Vue to use it:
+Create a new instance of `Pop` and install it with the Vue app:
 
 ```javascript
 import { createApp } from 'vue';
-import Pop from './'
+import { Pop } from '@sneppy/vue-pop'
+
 import App from './App.vue'
 
-export let pop = new Pop
+export let pop = new Pop()
 
 createApp(App)
 	.use(pop)
@@ -40,7 +37,7 @@ createApp(App)
 
 ```
 
-Place a `<pop-view/>` somewhere:
+Place `<pop-view/>` somewhere in the DOM tree. That's where the pop-ups will be spawned:
 
 ```html
 <template>
@@ -51,30 +48,31 @@ Place a `<pop-view/>` somewhere:
 </template>
 ```
 
-Next, import the `Pop` instance in some component, and use `Pop.push()` to push a popup window on the stack:
+Next, import the `Pop` instance where needed and use `Pop.push()` to push a popup window on the stack:
 
 ```javascript
 import { pop } from '@/main'
+import SomePopUpComponent from './SomePopUpComponent.vue'
 
 export default {
-	name: 'SomeComp',
-
 	setup() {
 
 		const onClick = () => pop.push({
-			comp: /* Component or async component */
+			comp: markRaw(SomePopUpComponent)
 		})
 	}
 }
 ```
 
-You can pop the topmost popup anytime using `Pop.pop()`.
+> Starting with `vue-pop@3.1.0` you need to explicitly mark the component as non-reactive with `markRaw()`
 
-Props can be passed down to the popup component like this:
+You can close the topmost pop-up anytime using `Pop.pop()`.
+
+Props can be passed down to the pop-up component like this:
 
 ```javascript
 pop.push({
-	comp: Message,
+	comp: markRaw(SomePopUpComponent),
 	props: {
 		title: 'Message title',
 		text: 'Message text'
@@ -82,24 +80,29 @@ pop.push({
 })
 ```
 
-You may also listen for events emitted by the component:
+You may also listen for events emitted by the pop-up component:
 
 ```javascript
 pop.push({
-	comp: ConfirmDialog,
+	comp: markRaw(ConfirmDialogComponent),
 	props: {
-		message: 'Are you sure you want to exit'
-	},
-	on: {
-		'confirm': () => doStuff(),
-		'cancel': () => pop.pop() // Close popup
+		message: 'Are you sure you want to exit',
+		onConfirm: () => submit(),
+		onCancel: () => pop.pop()
 	}
 })
 ```
 
-Note that the popup component is rendered as-is, which means that usually you will have to write some more HTML and CSS to make it look like an actual component.
+> See the [_v-on_ paragraph](https://v3.vuejs.org/guide/render-function.html#replacing-template-features-with-plain-javascript) in Vue 3 documentation
 
-_vue-pop_ comes with a predefined wrapper, which you can enable by passing the component as a prop:
+By default, vue-pop will listen for a `'close'` event and close the pop-up.
+
+```javascript
+// ConfirmDialogComponent
+emit('close') // This will close the pop-up, just like calling pop.pop()
+```
+
+vue-pop comes with a built-in wrapper, which is enabled by passing the component as a prop:
 
 ```javascript
 pop.push({
@@ -107,30 +110,29 @@ pop.push({
 		comp: ConfirmDialog,
 		message: 'Are you sure you want to exit'
 	},
-	on: {
-		'confirm': () => doStuff(),
-		'cancel': () => pop.pop() // Close popup
-	}
+	// ...
 })
 ```
 
-The wrapper component generates the following HTML:
+The wrapper component generates the following tree:
 
-```html
-<div class="pop-wrapper">
-	<div class="pop-overlay"></div>
-	<div class="pop-content">
-		<Component/>
-	</div>
-</div>
+```
+div.pop-wrapper
+	div.pop-overlay
+	div.pop-content
+		comp
 ```
 
-You can style the wrapper using these classes.
+You can also import a built-in style for the wrapper, or provide your own style:
+
+```javascript
+import '@sneppy/vue-pop/dist/index.css'
+```
 
 Notifications
 -------------
 
-_vue-pop_ also has an easy way to handle simple notifications. To enable notifications, create a new `Notif` instance right after creating the `Pop` instance:
+vue-pop provides an helper class to handle simple notifications. To enable it, create a new `Notif` instance right after creating the `Pop` instance:
 
 ```javascript
 let pop = new Pop
@@ -150,7 +152,7 @@ You will also need to create a dedicated view somewhere:
 </template>
 ```
 
-The `name` attribute designate that view as the notification view.
+The `name="notif"` attribute designate the view as the notification view.
 
 The notif object has various methods that determine the type of notification:
 
@@ -161,28 +163,28 @@ The notif object has various methods that determine the type of notification:
 | `warn` | warning message |
 | `error` | error message |
 
-All methods are invoked with a plain string message as first parameter and a time duration (ms) as second parameter:
+All methods accept a plain string message and a time duration (in milliseconds):
 
 ```javascript
-notif.done('Personal data updated', 3000)
+notif.done('User profile updated', 3000)
 ```
 
-The time duration may be `undefined`, in which case you will need to manually pop the notification with `Notif.pop()`.
+If the time duration is `undefined` the notification will be displayed until `notif.pop()` is called.
 
-By default, notifications are displayed in a bar that fills the top of the screen. You can change the position of notifications with the attribute `position` on the notif `<pop-view/>`:
+By default, notifications are displayed in a bar that fills the top of the screen. You can set the position of notifications using the `pos="(left|center|right|fill) (top|middle|bottom)"` attribute on `<pop-view/>`:
 
 ```html
 <pop-view name="notif" position="right bottom"/>
 ```
 
-Any combination of the following keywords is accepted: `left`, `center`, `right`, `fill` and `top`, `middle`, `bottom`.
+You will also need to import the built-in stylesheet, or provide your own.
 
-> Note that you will also need to import the styles in `src/style`.
-
-Multiple views
+Advanced Usage
 --------------
 
-You can define multiple views, usually with different names. In order to address a certain view, you must provide its name in `Pop.push()` and `Pop.pop()`:
+vue-pop can handle multiple views.
+
+Each view is identified by a unique `name` attribute. In order to address a certain view, you must provide its name in `Pop.push()` and `Pop.pop()`:
 
 ```html
 <pop-view name="messages"/>
@@ -191,16 +193,28 @@ You can define multiple views, usually with different names. In order to address
 
 ```javascript
 pop.push({
-	comp: SomeComp
+	comp: markRaw(Component)
 }, 'messages')
 
 pop.pop('other')
 ```
 
-The name is also passed as an attribute `view-name` and can be use to style the wrapper component of that view:
+> If two or more views share the same name, they will display the same pop-up
 
-```css
-.pop-wrapper[view-name=messages] {
-	...
-}
+The main view has no name.
+
+You can wrap a view in a [transition](https://v3.vuejs.org/guide/transitions-enterleave.html#transitioning-single-elements-components) component to apply enter and leave animations to the pop-up:
+
+```html
+<transition name="fade">
+	<pop-view/>
+</transition>
 ```
+
+---
+
+Check out other Vue libraries:
+
+- [Stallone](https://www.npmjs.com/package/@sneppy/stallone) is an elegant and intuitive library to create REST API
+  clients;
+- [vue-menu](https://www.npmjs.com/package/@sneppy/vue-menu) is a Vue 3 plugin to create custom context menus.
